@@ -14,6 +14,9 @@
                 text-align: center;
                 margin: auto;
             }
+            header span {
+                font-family: Helvetica;
+            }
             #inputDiv {
                 margin: auto;
             }
@@ -48,30 +51,22 @@
         <header>
             <h1>uncvd</h1>
             <h3>Paste or write below text with colors in hex </h3>
-            <h4><span style="font-family: Helvetica">e.g. "#132312, #fbdacd#deadbeef"</span></h4>
+            <h4><span>e.g. "#132312, #fbdacd#deadbeef"</span></h4>
         </header>
         <div style="width: 900px; margin: auto">
             <div id="inputDiv">
-                <textarea id="myInput" oninput="print_col()">
-                </textarea>
+                <textarea id="myInput" oninput="print_col()"></textarea>
             </div>
             <div id="lc" style="">
             </div>
             <script>
-                $(document).ready(function() {
-                    var colors = $("#in").text();
-                    $("p").append("<div></div>");
-
-                });
                 var printed = [];
                 function isPrinted(b) {
                     return printed.some(function(a){return a === b;});
                 }
                 function print_col() { 
                     var tekst = document.getElementById("myInput").value;
-                    // var tekst = $("#in").text(); // get the current value of the input field.
                     var color_regex = /#([0-9]|[a-fA-F]){6}/g;
-                    // var myArray = color_regex.exec(tekst);
                     var matches = []
                     var found;
                     while (found = color_regex.exec(tekst)) {
@@ -81,10 +76,11 @@
                         if (!isPrinted(matches[i])) {
                             var className = "color" + (printed.length).toString();
                             $("#lc").append('<div class="fullColor ' + className + '"></div>'); 
-                            $("div." + className).css("width", "100%");
-                            $("div." + className).append('<div class="code">' + matches[i] + '</div>');
-                            $("div." + className).append('<div class="color">&nbsp;</div>');
-                            $('div.' + className + " div.color").css("background-color", matches[i]);
+                            var newDivName = "div." + className;
+                            $(newDivName).css("width", "100%");
+                            $(newDivName).append('<div class="code">' + matches[i] + '</div>');
+                            $(newDivName).append('<div class="color">&nbsp;</div>');
+                            $(newDivName + " div.color").css("background-color", matches[i]);
                             printed.push(matches[i]);
                         }
                     }
