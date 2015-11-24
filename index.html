@@ -1,0 +1,85 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta charset="UTF-8">
+        <title>uncvd</title>
+        <script src="http://code.jquery.com/jquery-1.11.3.min.js"></script>
+        <style>
+            body {
+                background-color: linen;
+            }
+            #inputDiv {
+                margin: auto;
+            }
+            #myInput {
+                margin: auto;
+                padding: auto;
+                width: 100%;
+                min-height: 210px;
+            }
+            #lc {
+                margin: auto;
+                margin-top: 30px;
+                width: 100%;
+                float: left;
+            }
+            .fullColor {
+                border-bottom: 1px solid grey; 
+                margin-top: 5px;
+                height: 30px;
+            }
+            .code {
+                width: 50px;
+                float: left;
+            }
+            .color {
+                width: 450px;
+                float: right;
+            }
+        </style>
+    </head>
+    <body style="margin: 0px; margin: auto; padding: 0px">
+        <div style="width: 900px; margin: auto">
+            <div id="inputDiv">
+                <textarea id="myInput" oninput="print_col()">
+                </textarea>
+            </div>
+            <div id="lc" style="">
+            </div>
+            <script>
+                $(document).ready(function() {
+                    var colors = $("#in").text();
+                    $("p").append("<div></div>");
+
+                });
+                var printed = [];
+                function isPrinted(b) {
+                    return printed.some(function(a){return a === b;});
+                }
+                function print_col() { 
+                    var tekst = document.getElementById("myInput").value;
+                    // var tekst = $("#in").text(); // get the current value of the input field.
+                    var color_regex = /#([0-9]|[a-fA-F]){6}/g;
+                    // var myArray = color_regex.exec(tekst);
+                    var matches = []
+                    var found;
+                    while (found = color_regex.exec(tekst)) {
+                        matches.push(found[0]);
+                    }
+                    for (var i = 0; i < matches.length; ++i) {
+                        if (!isPrinted(matches[i])) {
+                            var className = "color" + (printed.length).toString();
+                            $("#lc").append('<div class="fullColor ' + className + '"></div>'); 
+                            $("div." + className).css("width", "100%");
+                            $("div." + className).append('<div class="code">' + matches[i] + '</div>');
+                            $("div." + className).append('<div class="color">&nbsp;</div>');
+                            $('div.' + className + " div.color").css("background-color", matches[i]);
+                            printed.push(matches[i]);
+                        }
+                    }
+                };
+            </script>
+        </div>
+    </body>
+
+</html>
