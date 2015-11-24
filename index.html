@@ -4,9 +4,15 @@
         <meta charset="UTF-8">
         <title>uncvd</title>
         <script src="http://code.jquery.com/jquery-1.11.3.min.js"></script>
+        <link href='https://fonts.googleapis.com/css?family=Architects+Daughter' rel='stylesheet' type='text/css'>
         <style>
             body {
                 background-color: linen;
+            }
+            header {
+                font-family: Architects Daughter, Helvetica;
+                text-align: center;
+                margin: auto;
             }
             #inputDiv {
                 margin: auto;
@@ -39,6 +45,11 @@
         </style>
     </head>
     <body style="margin: 0px; margin: auto; padding: 0px">
+        <header>
+            <h1>uncvd</h1>
+            <h3>Paste or write below text with colors in hex </h3>
+            <h4><span style="font-family: Helvetica">e.g. "#132312, #fbdacd#deadbeef"</span></h4>
+        </header>
         <div style="width: 900px; margin: auto">
             <div id="inputDiv">
                 <textarea id="myInput" oninput="print_col()">
