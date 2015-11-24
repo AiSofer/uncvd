@@ -33,17 +33,23 @@
                 float: left;
             }
             .fullColor {
-                border-bottom: 1px solid grey; 
-                margin-top: 5px;
-                height: 30px;
-            }
-            .code {
-                width: 50px;
+                height: 40px;
+                width: 20%;
+                min-width: 165px;
                 float: left;
             }
+            .code {
+                font-weight: bold;
+                width: 15%;
+                height: 30px;
+                float: left;
+                padding: 5px;
+            }
             .color {
-                width: 450px;
+                width: 50%;
+                height: 30px;
                 float: right;
+                margin: 5px;
             }
         </style>
     </head>
@@ -53,7 +59,7 @@
             <h3>Paste or write below text with colors in hex </h3>
             <h4><span>e.g. "#132312, #fbdacd#deadbeef"</span></h4>
         </header>
-        <div style="width: 900px; margin: auto">
+        <div style="width: 56%; margin: auto">
             <div id="inputDiv">
                 <textarea id="myInput" oninput="print_col()"></textarea>
             </div>
@@ -64,24 +70,56 @@
                 function isPrinted(b) {
                     return printed.some(function(a){return a === b;});
                 }
+                var hexbase = "0123456789abcdef";
+                function toHex(decNumber) {
+                    return (Math.floor(decNumber / 16)).toString(16) + (decNumber % 16).toString(16);
+                }
+                function toDec(hexNumber) {
+                    return parseInt(hexNumber, 16);
+                }
+                function toRGBA(hexColor) {
+                    var rgbaColor = "rgba(";
+                    for (var i = 1; i < hexColor.length; i += 2) {
+                        rgbaColor += toDec(hexColor.substr(i, 2)) + ", ";
+                    }
+                    rgbaColor += " 1)";
+                    return rgbaColor;
+                }
+                function inverseColor(color) {
+                    var invStr = "#";
+                    for (var i = 1; i < color.length; i += 2) {
+                        var invN = 255 - toDec(color.substr(i, 2));
+                        invStr = invStr + toHex(invN);
+                    }
+                    return invStr;
+                }
                 function print_col() { 
-                    var tekst = document.getElementById("myInput").value;
-                    var color_regex = /#([0-9]|[a-fA-F]){6}/g;
-                    var matches = []
-                    var found;
-                    while (found = color_regex.exec(tekst)) {
-                        matches.push(found[0]);
+                    var text = document.getElementById("myInput").value;
+                    var colorRegEx = /#([0-9]|[a-fA-F]){6}/g;
+                    var matches = [];
+                    var f;
+                    var newDiv = function(divClass, content) {
+                        return '<div class="' + divClass + '">'+ content + '</div>';
+                    };
+                    while (f = colorRegEx.exec(text)) {
+                        matches.push(f[0]);
                     }
                     for (var i = 0; i < matches.length; ++i) {
-                        if (!isPrinted(matches[i])) {
-                            var className = "color" + (printed.length).toString();
-                            $("#lc").append('<div class="fullColor ' + className + '"></div>'); 
+                        var newColor = matches[i];
+                        if (!isPrinted(newColor)) {
+                            var colorNumber = (printed.length).toString();
+                            var fullColorClassName = "fullColor";
+                            var className = "color" + colorNumber;
+                            $("#lc").append(newDiv(fullColorClassName + " " + className, ""));
                             var newDivName = "div." + className;
-                            $(newDivName).css("width", "100%");
-                            $(newDivName).append('<div class="code">' + matches[i] + '</div>');
+                            var invCol = inverseColor(newColor);
+                            $(newDivName).append(newDiv("code", newColor));
                             $(newDivName).append('<div class="color">&nbsp;</div>');
-                            $(newDivName + " div.color").css("background-color", matches[i]);
-                            printed.push(matches[i]);
+                            var colorDiv = newDivName + " div.color";
+                            $(colorDiv).css("background-color", newColor);
+                            $(colorDiv).css("box-shadow", "0px 0px 1px " + invCol);
+                            $(colorDiv).css("border-radius", "6px");
+                            printed.push(newColor);
                         }
                     }
                 };
