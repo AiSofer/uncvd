@@ -105,7 +105,7 @@
                         matches.push(f[0]);
                     }
                     for (var i = 0; i < matches.length; ++i) {
-                        var newColor = matches[i];
+                        var newColor = matches[i].toLowerCase();
                         if (!isPrinted(newColor)) {
                             var colorNumber = (printed.length).toString();
                             var fullColorClassName = "fullColor";
